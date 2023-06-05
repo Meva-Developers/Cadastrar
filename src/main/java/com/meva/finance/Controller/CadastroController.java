@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 import javax.validation.Valid;
+import javax.xml.bind.ValidationException;
 
 
 @RestController
@@ -21,13 +22,15 @@ public class CadastroController {
     @Autowired
     private UsersRepository usersRepository;
 
+
     @Autowired
     private UserService userService;
 
     @PostMapping("/cadastrar")
-    public ResponseEntity<UsersDto> cadastrar(@RequestBody UsersDto dto){
+    public ResponseEntity<UsersDto> cadastrar(@RequestBody UsersDto dto) throws ValidationException {
       userService.serviceCadastrar(dto);
       return ResponseEntity.ok().build();
+
     }
 
     @PutMapping("/atualizar/{cpf}")
@@ -37,8 +40,8 @@ public class CadastroController {
     }
 
     @DeleteMapping("/{cpf}")
-    public ResponseEntity<String> remover(@PathVariable String cpf){
-        usersRepository.deleteById(cpf);
+    public ResponseEntity<String> remover(@PathVariable String id, UsersDto usersDto){
+        userService.remover(id);
         return ResponseEntity.ok().build();
     }
 
